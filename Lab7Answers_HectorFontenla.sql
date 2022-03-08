@@ -16,27 +16,16 @@ WHERE payment_date LIKE '2005-08%'
 GROUP BY s.staff_id, month(payment_date);
 
 #Which actor has appeared in the most films?
-SELECT a.actor_id, a.first_name, a.last_name, fa.film_id FROM actor as a
+SELECT count(a.actor_id), fa.film_id FROM actor as a
 JOIN film_actor as fa
 ON a.actor_id = fa.actor_id
 JOIN film as fi
-ON fa.film_id = fi.film_id;
+ON fa.film_id = fi.film_id
+GROUP BY fa.film_id;
 
 
 #Most active customer (the customer that has rented the most number of films)
 
-#I DO NOT UNDERSTAND WHY THIS IS not filtering out the film counts which are equal to 1
-SELECT c.customer_id, c.first_name, c.last_name, r.rental_id, count(film_id) as 'film_count_per_rental'
-FROM customer as c
-JOIN rental as r
-ON c.customer_id = r. customer_id
-JOIN inventory as i
-ON r.inventory_id = i.inventory_id
-GROUP BY c.customer_id, r.rental_id
-HAVING 'film_count_per_rental' <> '1';
-
-
-#I KEPT GOING ANYWAYS
 SELECT c.customer_id, c.first_name, c.last_name, count(i.film_id) as 'count_of_films', count(r.rental_id) as 'count_of_rentals'
 FROM customer as c
 JOIN rental as r
